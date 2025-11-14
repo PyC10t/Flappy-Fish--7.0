@@ -17,6 +17,7 @@ body {
   width: 100vw;
   height: 100vh;
   z-index: 10;
+  touch-action: none;
 }
 
 /* Menú principal */
@@ -89,4 +90,18 @@ button:hover {
 @keyframes fadeIn {
   from { opacity: 0; transform: translate(-50%, -45%); }
   to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+/* Mejorar tamaño de botones en móvil */
+@media (max-width: 600px) {
+  button, #jumpBtn {
+    font-size: 1.3em;
+    padding: 18px 30px;
+    border-radius: 18px;
+  }
+  #menu, #gameOverScreen {
+    width: 95vw;
+    left: 2.5vw;
+    transform: translateY(-50%);
+  }
 }
