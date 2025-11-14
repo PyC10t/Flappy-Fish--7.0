@@ -152,13 +152,18 @@ for (let i = 0; i < 25; i++) {
 }
 
 // Reiniciar juego
+function isTouchDevice() {
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+}
+
 function resetGame() {
+  const liftValue = isTouchDevice() ? -5.2 : -8;
   fish = {
     x: canvas.width / 4,
     y: canvas.height / 2,
     radius: 25,
     gravity: 0.4,
-    lift: -8,
+    lift: liftValue,
     velocity: 0,
     rotation: 0
   };
@@ -169,10 +174,14 @@ function resetGame() {
   gap = 160;
   clearInterval(pipeInterval);
   // Asignar paleta aleatoria al pez jugador
+  setRandomFishPalette();
+// Cambia la paleta del pez jugador a una aleatoria
+function setRandomFishPalette() {
   const pal = fishPalettes[Math.floor(Math.random() * fishPalettes.length)];
   fish.colorMain = pal[0];
   fish.colorMid = pal[1];
   fish.colorAccent = pal[2];
+}
 }
 
 // Iniciar juego
@@ -384,16 +393,36 @@ function showEndScreen(msg) {
 window.addEventListener('keydown', (e) => {
   if (e.code === 'Space' && !gameOver && !countdownActive) {
     fish.velocity = fish.lift;
+    setRandomFishPalette();
   }
 });
 
 canvas.addEventListener('touchstart', () => {
-  if (!gameOver && !countdownActive) fish.velocity = fish.lift;
+  if (!gameOver && !countdownActive) {
+    fish.velocity = fish.lift;
+    setRandomFishPalette();
+  }
 });
 
 canvas.addEventListener('click', () => {
-  if (!gameOver && !countdownActive) fish.velocity = fish.lift;
+  if (!gameOver && !countdownActive) {
+    fish.velocity = fish.lift;
+    setRandomFishPalette();
+  }
 });
+
+// Soporte para botón de salto en móvil
+const jumpBtn = document.getElementById('jumpBtn');
+if (jumpBtn) {
+  jumpBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    if (!gameOver && !countdownActive) fish.velocity = fish.lift;
+  });
+  jumpBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!gameOver && !countdownActive) fish.velocity = fish.lift;
+  });
+}
 
 startBtn.addEventListener('click', startGame);
 restartBtn.addEventListener('click', startGame);
